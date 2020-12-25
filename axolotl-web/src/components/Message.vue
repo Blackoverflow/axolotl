@@ -34,10 +34,11 @@
                <a @click="shareAttachment(m.File,$event)" :href="'http://localhost:9080/attachments?file='+m.File">{{m.FileName?m.FileName:m.File}}</a>
              </div>
              <div v-else-if="m.CType==5" class="attachment-video" @click="$emit('showFullscreenVideo', m.File)">
-               <video @click="showFullscreenVideo(m.File)">
+               <video>
                  <source :src="'http://localhost:9080/attachments?file='+m.File">
                    <span v-translate>Your browser does not support the audio element.</span>
                </video>
+               <img class="play-button" src="../assets/images/play.svg" />
              </div>
              <div v-else-if="m.File!=''" class="attachment">
                <span v-translate>Not supported mime type:</span> {{m.CType}}
@@ -59,7 +60,7 @@
            <a :href="'http://localhost:9080/attachments?file='+message.Attachment">File</a>
          </div>
          <div v-else-if="message.CType==5" class="attachment-video" @click="$emit('showFullscreenVideo', message.Attachment)">
-           <video @click="showFullscreenVideo(message.Attachment)">
+           <video>
              <source :src="'http://localhost:9080/attachments?file='+message.Attachment">
                <span v-translate>Your browser does not support the video element.</span>
            </video>
@@ -70,7 +71,12 @@
          </div>
        </div>
        <div class="message-text">
-         <div class="message-text-content" v-html="message.Message" v-linkified ></div>
+         <blockquote v-if="message.QuotedMessage != null">
+           <cite v-if="message.QuotedMessage.Outgoing"  v-translate>You</cite>
+           <cite v-else>{{getName(message.QuotedMessage.Source)}}</cite>
+           <p>{{message.QuotedMessage.Message}}</p>
+         </blockquote>
+         <div class="message-text-content" v-html="linkify($sanitize(message.Message))"></div>
          <div class="status-message" v-if="message.Attachment.includes('null')&&message.Message==''&&message.Flags==0">
            <span v-translate>Set timer for self-destructing messages </span>
            <div> {{humanifyTimePeriod(message.ExpireTimer)}}</div>
@@ -138,6 +144,14 @@ export default {
       }
       // JSON.parse(input)
     },
+    timerPercentage(m){
+      var r = moment(m.ReceivedAt)
+      var duration = moment.duration(r.diff(moment.now()));
+      var percentage = 1-((m.ExpireTimer+duration.asSeconds())/m.ExpireTimer)
+      if(percentage<1)
+      return 179*percentage
+      else return 0
+    },
     verifySelfDestruction(m){
       if(m.ExpireTimer!=0){
         // console.log(m.ExpireTimer,m.SentAt, m.ReceivedAt, Date.now())
@@ -146,6 +160,7 @@ export default {
           var r = moment(m.ReceivedAt)
           var duration = moment.duration(r.diff(moment.now()));
           if((duration.asSeconds()+m.ExpireTimer)<0&&m.Message!=""){
+            // TODO: message should be deleted
             return false;
           }
         }
@@ -153,6 +168,7 @@ export default {
           var rS = moment(m.SentAt)
           var durationS = moment.duration(rS.diff(moment.now()));
           if((durationS.asSeconds()+m.ExpireTimer)<0&&m.Message!=""){
+            // TODO: message should be deleted
             return false;
           }
         }
@@ -186,7 +202,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .message-text{
   overflow-wrap: break-word;
 }
@@ -248,10 +264,10 @@ video,
 }
 .transfer-indicator {
   width: 18px;
-  height: 18px;
+  height: 12px;
   margin-left: 4px;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: left center;
 }
 .error .transfer-indicator {
   background-image: url("../assets/images/warning.svg");
@@ -303,5 +319,33 @@ video,
 .gallery img{
   padding-right:3px;
   padding-bottom:3px;
+}
+.attachment-video{
+  position:relative;
+
+  .play-button {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+blockquote {
+  padding: 0.5rem;
+  margin-bottom: 5px;
+  background-color: #00000044;
+  border-left: solid 4px #00000044;
+  border-radius: 4px;
+
+  cite {
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  p {
+    margin: 0;
+  }
 }
 </style>

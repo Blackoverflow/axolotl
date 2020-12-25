@@ -1,7 +1,11 @@
 package store
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/nanu-c/axolotl/app/helpers"
+	signalservice "github.com/signal-golang/textsecure/protobuf"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -24,6 +28,8 @@ type Message struct {
 	SendingError  bool   `db:"sendingError"`
 	Receipt       bool   `db:"receipt"`
 	StatusMessage bool   `db:"statusMessage"`
+	QuoteID       int64  `db:"quoteId"`
+	QuotedMessage *Message
 }
 
 func SaveMessage(m *Message) (error, *Message) {
@@ -46,7 +52,7 @@ func UpdateMessageSent(m *Message) error {
 	if m.SendingError {
 		log.Errorln("[axolotl] sending message failed ", m.SentAt)
 	}
-	_, err := DS.Dbx.NamedExec("UPDATE messages SET sentat = :sentat, sendingError = :sendingError, expireTimer = :expireTimer  WHERE id = :id", m)
+	_, err := DS.Dbx.NamedExec("UPDATE messages SET sentat = :sentat, sendingError = :sendingError,  issent = :issent, expireTimer = :expireTimer  WHERE id = :id", m)
 	if err != nil {
 		return err
 	}
@@ -109,21 +115,8 @@ func LoadMessagesFromDB() error {
 			m.HTime = helpers.HumanizeTimestamp(m.SentAt)
 		}
 	}
-	//qml.Changed(SessionsModel, &SessionsModel.Len)
 	return nil
 }
-
-// func LoadMessagesList(id int64) (error, *MessageList) {
-// 	messageList := &MessageList{
-// 		ID: id,
-// 	}
-// 	log.Printf("Loading Messages for " + string(id))
-// 	err := DS.Dbx.Select(&messageList.Messages, messagesSelectWhere, id)
-// 	if err != nil {
-// 		return err, nil
-// 	}
-// 	return nil, messageList
-// }
 func DeleteMessage(id int64) error {
 	_, err := DS.Dbx.Exec("DELETE FROM messages WHERE id = ?", id)
 	return err
@@ -137,4 +130,45 @@ func (s *Session) GetMessages(i int) *Message {
 }
 func (m *Message) GetName() string {
 	return TelToName(m.Source)
+}
+
+// FindQuotedMessage searches the equivalent message of DataMessage_Quote in our
+// DB and returns the local message id
+func FindQuotedMessage(quote *signalservice.DataMessage_Quote) (error, int64) {
+	var quotedMessages = []Message{}
+	err := DS.Dbx.Select(&quotedMessages, "SELECT * FROM messages WHERE sentat = ?", quote.GetId())
+	if err != nil {
+		return err, -1
+	}
+	if len(quotedMessages) == 0 {
+		return errors.New("quoted message not found " + fmt.Sprint(quote.GetId())), -1
+	}
+	id := quotedMessages[0].ID
+	return nil, id
+}
+
+// returns a message by it's ID
+func GetMessageById(id int64) (error, *Message) {
+	var message = []Message{}
+	err := DS.Dbx.Select(&message, "SELECT * FROM messages WHERE id = ?", id)
+	if err != nil {
+		return err, nil
+	}
+	if len(message) == 0 {
+		return errors.New("Message not found " + fmt.Sprint(id)), nil
+	}
+	return nil, &message[0]
+}
+
+// FindOutgoingMessage returns  a message that is found by it's timestamp
+func FindOutgoingMessage(timestamp uint64) (*Message, error) {
+	var message = []Message{}
+	err := DS.Dbx.Select(&message, "SELECT * FROM messages WHERE outgoing = 1 AND sentat = ?", timestamp)
+	if err != nil {
+		return nil, err
+	}
+	if len(message) == 0 {
+		return nil, errors.New("Message not found " + fmt.Sprint(timestamp))
+	}
+	return &message[0], nil
 }

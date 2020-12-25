@@ -1,12 +1,14 @@
 app-id: org.nanuc.Axolotl
 branch: main
-runtime: org.freedesktop.Platform
-runtime-version: '20.08'
-sdk: org.freedesktop.Sdk
+runtime: org.kde.Platform
+runtime-version: '5.15'
+sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.golang
   - org.freedesktop.Sdk.Extension.node12
 command: axolotl
+base: io.qt.qtwebengine.BaseApp
+base-version: "5.15"
 finish-args:
   # See https://docs.flatpak.org/en/latest/sandbox-permissions-reference.html
   # Write access for the user download folder (to save media)
@@ -31,6 +33,7 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   # Specify axolotl-web location
   - --env=AXOLOTL_WEB_DIR=/app/bin/axolotl-web/dist
+  - --env=AXOLOTL_GUI_DIR=/app/share/axolotl/
 
 modules:
   - name: axolotl
@@ -45,6 +48,7 @@ modules:
          go mod download -x;
          go build -v"
       - "install -Dm 755 src/github.com/nanu-c/axolotl/axolotl ${FLATPAK_DEST}/bin/axolotl"
+      - "install -Dm 755 $(which qmlscene) ${FLATPAK_DEST}/bin"
     sources:
       - type: git
         url: "https://github.com/nanu-c/axolotl"
@@ -63,10 +67,12 @@ modules:
          npm ci;
          npm run build"
       - "mkdir -p ${FLATPAK_DEST}/bin/axolotl-web"
+      - "mkdir -p ${FLATPAK_DEST}/share/axolotl"
       - "cp -r src/github.com/nanu-c/axolotl/axolotl-web/dist ${FLATPAK_DEST}/bin/axolotl-web"
       - "install -Dm 644 src/github.com/nanu-c/axolotl/flatpak/org.nanuc.Axolotl.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png"
       - "install -Dm 644 src/github.com/nanu-c/axolotl/flatpak/org.nanuc.Axolotl.appdata.xml ${FLATPAK_DEST}/share/appdata/${FLATPAK_ID}.appdata.xml"
-      - "install -Dm 644 src/github.com/nanu-c/axolotl/flatpak/org.nanuc.Axolotl.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - "install -Dm 644 src/github.com/nanu-c/axolotl/flatpak/qt/org.nanuc.Axolotl.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - "cp -r src/github.com/nanu-c/axolotl/guis ${FLATPAK_DEST}/share/axolotl/"
     sources:
       - type: git
         url: "https://github.com/nanu-c/axolotl"

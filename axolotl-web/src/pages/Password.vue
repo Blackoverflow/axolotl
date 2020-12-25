@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'password',
   methods:{
@@ -20,7 +22,6 @@ export default {
     },
     unregister(){
       this.$store.dispatch("unregister");
-
     }
   },
   data() {
@@ -32,6 +33,7 @@ export default {
     document.getElementById("passwordInput").focus();
   },
   computed: {
+    ...mapState(['registrationStatus']),
     error () {
       return this.$store.state.loginError;
     }

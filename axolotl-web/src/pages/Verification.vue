@@ -27,6 +27,7 @@
 <script>
 import Sms from 'ofcold-security-code';
 import { mapState } from 'vuex';
+
 export default {
   name: 'verification',
   components: {
@@ -52,7 +53,7 @@ export default {
       }
     }
   },
-  computed: mapState(['verificationError', 'requestPin']),
+  computed: mapState(['verificationError', 'requestPin', 'registrationStatus']),
   data() {
     return {
       code:"",

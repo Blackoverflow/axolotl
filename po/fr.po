@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-10-17 17:55+0200\n"
+"PO-Revision-Date: 2020-12-13 18:44+0100\n"
 "Last-Translator: Anne017\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -40,10 +40,6 @@ msgstr "Ajouter des membres"
 msgid "Audio"
 msgstr "Audio"
 
-#: src/pages/About.vue:10
-msgid "by becoming a"
-msgstr "en devenant un"
-
 #: src/pages/Contacts.vue:3
 msgid "Can't change contact list: {{error}}"
 msgstr "Impossible de mettre à jour la liste des contacts : {{error}}"
@@ -76,7 +72,7 @@ msgstr "Créer un groupe"
 msgid "Creating Group"
 msgstr "Création du groupe"
 
-#: src/pages/SetPassword.vue:21
+#: src/pages/SetPassword.vue:20
 msgid "Current Password"
 msgstr "Mot de passe actuel"
 
@@ -132,7 +128,7 @@ msgstr "Importation des contacts en cours, revenez plus tard"
 msgid "Info"
 msgstr "Informations"
 
-#: src/pages/About.vue:8
+#: src/pages/About.vue:11
 msgid "issues at the bug tracker"
 msgstr "problèmes dans le système de suivi"
 
@@ -164,6 +160,10 @@ msgstr "Nom"
 msgid "New group"
 msgstr "Nouveau groupe"
 
+#: src/pages/SetPassword.vue:13
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
 #: src/pages/Register.vue:16
 msgid "Next"
 msgstr "Suivant"
@@ -176,11 +176,11 @@ msgstr "Aucune discussion disponible"
 msgid "No linked devices"
 msgstr "Aucun appareil lié"
 
-#: src/pages/MessageList.vue:128
+#: src/pages/MessageList.vue:25
 msgid "No Messages available."
 msgstr "Aucun message disponible."
 
-#: src/pages/MessageList.vue:64 src/pages/MessageList.vue:90
+#: src/components/Message.vue:41 src/components/Message.vue:67
 msgid "Not supported mime type:"
 msgstr "Type de fichier non supporté :"
 
@@ -188,17 +188,13 @@ msgstr "Type de fichier non supporté :"
 msgid "Note, you can't add yourself to a group."
 msgstr "Note : vous ne pouvez pas vous ajouter vous-même à un groupe."
 
-#: src/pages/About.vue:9
-msgid "or"
-msgstr "ou"
+#: src/pages/About.vue:13
+msgid "or by becoming a"
+msgstr "ou en devenant un"
 
 #: src/pages/Verification.vue:4
 msgid "or disable it on Android/IOs"
 msgstr "ou le désactiver sur Android / iOS"
-
-#: src/pages/SetPassword.vue:13
-msgid "Password"
-msgstr "Mot de passe"
 
 #: src/pages/Password.vue:2
 msgid "Password is wrong"
@@ -220,7 +216,7 @@ msgstr "Photo"
 msgid "Registered number"
 msgstr "Numéro d'enregistrement"
 
-#: src/pages/SetPassword.vue:17
+#: src/pages/SetPassword.vue:16
 msgid "Repeat password"
 msgstr "Répétez le nouveau mot de passe"
 
@@ -256,11 +252,11 @@ msgstr "Envoyer un code PIN"
 msgid "Set encryption password"
 msgstr "Définir un mot de passe de chiffrement"
 
-#: src/pages/SetPassword.vue:24 src/pages/Settings.vue:14
+#: src/pages/SetPassword.vue:23 src/pages/Settings.vue:14
 msgid "Set password"
 msgstr "Définir un mot de passe"
 
-#: src/pages/MessageList.vue:96
+#: src/components/Message.vue:78
 msgid "Set timer for self-destructing messages"
 msgstr "Régler la minuterie pour les messages auto-destructibles"
 
@@ -280,17 +276,14 @@ msgstr "Paramètres"
 msgid "Show identity"
 msgstr "Afficher l’identité"
 
-#: src/pages/About.vue:11
+#: src/pages/About.vue:14
 msgid "sponsor on patreon."
 msgstr "mécène sur Patreon."
 
 #: src/pages/About.vue:6
 msgid ""
-"This is a free and open source signal client written in golang and vuejs.\n"
-"      You can support the development of axolotl either by filling"
-msgstr ""
-"Ceci est un client Signal libre écrit en golang et vuejs.\n"
-"    Vous pouvez aider le développement d'Axolotl soit en remplissant"
+"This is a free and open source signal client written in golang and vuejs."
+msgstr "Ceci est un client Signal libre écrit en golang et vuejs."
 
 #: src/components/Header.vue:26 src/pages/ChatList.vue:25
 msgid "Unknown group"
@@ -309,7 +302,7 @@ msgstr "Se désinscrire"
 msgid "Unsafe password"
 msgstr "Mot de passe peu sûr"
 
-#: src/pages/MessageList.vue:99
+#: src/components/Message.vue:81
 msgid "Unsupported message type: sticker"
 msgstr "Type de fichier non supporté : autocollant"
 
@@ -329,14 +322,34 @@ msgstr "Vidéo"
 msgid "Wrong code entered. Restart for another try."
 msgstr "Code saisi incorrect. Redémarrez pour un nouvel essai."
 
-#: src/pages/MessageList.vue:14 src/pages/MessageList.vue:51
-#: src/pages/MessageList.vue:60 src/pages/MessageList.vue:75
+#: src/components/Message.vue:72
+msgid "You"
+msgstr "Vous"
+
+#: src/pages/About.vue:8
+msgid "You can support the development of axolotl either by filling"
+msgstr "Vous pouvez aider le développement d'Axolotl soit en remplissant"
+
+#: src/components/Message.vue:27 src/components/Message.vue:36
+#: src/components/Message.vue:52 src/pages/MessageList.vue:14
 msgid "Your browser does not support the audio element."
 msgstr "Votre navigateur ne prend pas en charge l'élément audio."
 
-#: src/pages/MessageList.vue:85
+#: src/components/Message.vue:62
 msgid "Your browser does not support the video element."
 msgstr "Votre navigateur ne prend pas en charge l'élément vidéo."
+
+#~ msgid "Password"
+#~ msgstr "Mot de passe"
+
+#~ msgid "or"
+#~ msgstr "ou"
+
+#, fuzzy
+#~ msgid "written in golang and vuejs."
+#~ msgstr ""
+#~ "Ceci est un client Signal libre écrit en golang et vuejs.\n"
+#~ "    Vous pouvez aider le développement d'Axolotl soit en remplissant"
 
 #~ msgid "No devices available"
 #~ msgstr "Aucun appareil disponible"

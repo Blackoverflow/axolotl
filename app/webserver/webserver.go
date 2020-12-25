@@ -65,10 +65,12 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
+
+	// send configs after establishing websocket connection
 	SetGui()
+	SetUiDarkMode()
 	sendRegistrationStatus()
 
-	SetUiDarkMode()
 	if registered {
 		UpdateChatList()
 		UpdateContactList()
@@ -177,7 +179,7 @@ func wsReader(conn *websocket.Conn) {
 			// catch status
 			go func() {
 				m := <-updateMessageChannel
-				go UpdateMessageHandler(m)
+				go UpdateMessageHandlerWithSource(m, sendMessageMessage.To)
 
 			}()
 

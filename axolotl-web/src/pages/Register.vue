@@ -43,7 +43,6 @@ export default {
   },
   methods:{
     requestCode(){
-      // console.log(this.cc)
       if(typeof this.cc!="undefined")
       this.$store.dispatch("requestCode",this.cc);
     },
@@ -69,7 +68,7 @@ export default {
       infoPage:true,
     };
   },
-  computed: mapState(['gui', 'ratelimitError']),
+  computed: mapState(['gui', 'ratelimitError', 'registrationStatus']),
   watch:{
     cc(){
       document.getElementById("VuePhoneNumberInput_phone_number").focus()

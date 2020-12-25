@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="checkDebug">
     <header-comp></header-comp>
     <main class="container">
       <error-modal  v-if="error"/>
@@ -28,10 +28,17 @@ if (window.getCookie("darkMode") === 'true') {
 } else {
   import ('./assets/light.scss');
 }
+import { router } from './router/router';
 import HeaderComp from "@/components/Header.vue"
 import ErrorModal from "@/components/ErrorModal.vue"
 export default {
   name: 'axolotl-web',
+  data() {
+    return {
+      lastTappedForDebug: new Date(),
+      nbTappedForDebug: 0
+    }
+  },
   components: {
     HeaderComp,
     ErrorModal
@@ -43,6 +50,23 @@ export default {
   computed: {
     error () {
       return this.$store.state.error
+    }
+  },
+  methods: {
+    checkDebug() {
+      if (this.lastTappedForDebug.getTime() + 1000 > Date.now()) {
+        this.nbTappedForDebug++;
+      } else {
+        this.nbTappedForDebug = 1;
+      }
+      this.lastTappedForDebug = new Date();
+    }
+  },
+  watch: {
+    nbTappedForDebug() {
+      if (this.nbTappedForDebug >= 9) {
+        router.push('/debug');
+      }
     }
   }
 }
@@ -56,8 +80,6 @@ html,
 body,
 #app {
   height: 100%;
-}
-#app {
   font-family:"ubuntu";
   display: flex;
   flex-direction: column;

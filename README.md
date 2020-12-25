@@ -40,7 +40,7 @@ Installation of development environment
 * Install [Golang](https://golang.org/doc/install)
 * Install node js (see the [.nvmrc](axolotl-web/.nvmrc)) file for the supported version
 * Add gopath to ~/.bashrc https://github.com/golang/go/wiki/SettingGOPATH
-* install dependencies `sudo apt install mercurial`
+* install dependencies `sudo apt install mercurial gettext`
 * Check out this git `go get -d github.com/nanu-c/axolotl`
 * `cd $(go env GOPATH)/src/github.com/nanu-c/axolotl`
 * get go dependencies `go mod download`
@@ -91,6 +91,7 @@ Run flags
 Environment variables
 -----------
 * `AXOLOTL_WEB_DIR` Specify the directory to use for axolotl-web. This is used by `axolotl` during startup.
+* `AXOLOTL_GUI_DIR` Specifies the directory used for GUI specifications. This is used by `axolotl` only when in `qt` mode.
 
 Contributing
 -----------

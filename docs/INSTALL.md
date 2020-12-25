@@ -16,6 +16,11 @@ The following build dependencies are required:
 * Docker
 * Go
 
+The following translation dependencies are required:
+```
+sudo apt-get install gettext
+```
+
 The following go-qml dependencies are required:
 ```
 sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
@@ -66,7 +71,7 @@ To build the application, use the following command from the root of this reposi
 
 To install the built snap, use snap:
 
-`sudo snap install axolotl_0.8.9_amd64.snap --dangerous`
+`sudo snap install axolotl_0.9.2_amd64.snap --dangerous`
 
 **Run**
 
@@ -80,6 +85,8 @@ To start the application, either search for "Axolotl" in your app drawer or star
 
 This requires `flatpak` and `flatpak-builder` to be installed locally.
 Installation instructions can be found [here](https://flatpak.org/setup/)
+
+### Web Version
 
 **Dependencies**
 
@@ -99,21 +106,89 @@ To list installed applications and/or runtimes, use `flatpak list`.
 The Flatpak [manifest](https://docs.flatpak.org/en/latest/manifests.html) used for the installation can be found
 in the /flatpak subdirectory.
 
-User-level: 
+User-level:
 
-```flatpak-builder --user --install build ./flatpak/org.nanuc.Axolotl.yml```
+```flatpak-builder --user --install build ./flatpak/web/org.nanuc.Axolotl.yml```
 
 System-wide:
 
 Note that this requires root.
 
-```sudo flatpak-builder --install build ./flatpak/org.nanuc.Axolotl.yml```
+```sudo flatpak-builder --install build ./flatpak/web/org.nanuc.Axolotl.yml```
 
 **Run**
 
 To start the application, either search for "Axolotl" in your app drawer or start it with the below command.
 
 `flatpak run org.nanuc.Axolotl`
+
+### QT Version
+
+**Dependencies**
+
+The following Flatpak SDKs are required:
+```
+flatpak install org.kde.Platform//5.15
+flatpak install org.kde.Sdk//5.15
+flatpak install org.freedesktop.Sdk.Extension.golang//20.08
+flatpak install org.freedesktop.Sdk.Extension.node12//20.08
+flatpak install io.qt.qtwebengine.BaseApp//5.15
+```
+
+**Build and Install**
+
+Installation can be done user-level or system-wide.
+To list installed applications and/or runtimes, use `flatpak list`.
+
+The Flatpak [manifest](https://docs.flatpak.org/en/latest/manifests.html) used for the installation can be found
+in the /flatpak subdirectory.
+
+User-level:
+
+```flatpak-builder --user --install build ./flatpak/qt/org.nanuc.Axolotl.yml```
+
+System-wide:
+
+Note that this requires root.
+
+```sudo flatpak-builder --install build ./flatpak/qt/org.nanuc.Axolotl.yml```
+
+**Run**
+
+To start the application, either search for "Axolotl" in your app drawer or start it with the below command.
+
+`flatpak run org.nanuc.Axolotl -e=qt`
+
+### Create a Flatpak bundle
+
+Flatpak supports creating a [bundle](https://docs.flatpak.org/en/latest/single-file-bundles.html), which is a single
+binary which can be used to distribute the application using removable media, or to send the application as an email
+attachment.
+
+To create a bundle, use the following steps.
+
+**Dependencies**
+
+During the build process, a gpg key is needed.
+To generate one, install [gpg](https://www.gnupg.org/download/) and use it to generate a key (if you dont have one
+already) with `gpg --gen-key`.
+
+Then find and take note what your gpg key id is by looking for your key with `gpg --list-keys`.
+
+**Build and Sign**
+
+```
+flatpak-builder --default-branch=main --disable-cache --force-clean --gpg-sign=mQINBFlD2sABEADsiUZUO... --repo=axolotl.repo axolotl.build ./flatpak/web/org.nanuc.Axolotl.yml
+```
+
+To then create the bundle, use the following.
+Note that they should be executed from the same location, as the folder "axolotl.repo" is first generated, and then used.
+
+```
+flatpak build-bundle axolotl.repo axolotl.flatpak org.nanuc.Axolotl main --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
+```
+
+The end result is a binary file called `axolotl.flatpak`.
 
 ## AppImage
 
