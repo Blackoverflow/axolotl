@@ -7,13 +7,11 @@ require (
 	github.com/asticode/go-astilectron-bootstrap v0.4.14
 	github.com/dustin/go-humanize v1.0.0
 	github.com/gen2brain/beeep v0.0.0-20220518085355-d7852edf42fc
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/gorilla/websocket v1.5.0
-	github.com/jmoiron/sqlx v1.2.0
+	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.8.0 // indirect
-	github.com/mattn/go-sqlite3 v1.14.0 // indirect
 	github.com/mutecomm/go-sqlcipher v0.0.0-20190227152316-55dbde17881f
 	github.com/pkg/errors v0.9.1
 	github.com/signal-golang/go-vcard v0.1.2
