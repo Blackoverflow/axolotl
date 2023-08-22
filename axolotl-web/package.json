@@ -48,7 +48,7 @@
     "browserslist": "^4.21.3",
     "autoprefixer": "^10.4.8",
     "chai": "^4.3.6",
-    "depcheck": "^1.4.3",
+    "depcheck": "^1.4.5",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
