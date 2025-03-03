@@ -28,7 +28,7 @@
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.0",
     "file-saver": "^2.0.5",
-    "linkify-html": "^3.0.4",
+    "linkify-html": "^4.2.0",
     "linkifyjs": "^3.0.4",
     "moment": "^2.29.4",
     "qrcode": "1.5.1",
