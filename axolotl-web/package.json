@@ -29,7 +29,7 @@
     "bootstrap": "^5.2.0",
     "file-saver": "^2.0.5",
     "linkify-html": "^3.0.4",
-    "linkifyjs": "^3.0.4",
+    "linkifyjs": "^3.0.5",
     "moment": "^2.29.4",
     "qrcode": "1.5.1",
     "vue": "^3.2.37",
